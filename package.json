@@ -9,7 +9,7 @@
     "url": "canonium.com"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=4.0.0"
   },
   "scripts": {
     "pretest": "rimraf out && tslint src/**/*.ts && tsc",
