@@ -71,8 +71,11 @@ function parse(text: string) {
 				str += token[1];
 				pos++;
 			}
+			const stat = str.match(/(?:\(([\w-,\s]+)\))?\s['"](.*)['"]/);
 
-			const stat = str.match(/(?:\(([\w-,\s]+)\))?\s"(.*)"/);
+			if (!stat) {
+				continue;
+			}
 
 			imports.push({
 				filepath: stat[2],
