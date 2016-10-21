@@ -204,8 +204,6 @@ function parse(text: string) {
 	};
 }
 
-export function getParser() {
-	return {
-		parse: (text: string) => parse(text)
-	};
-}
+export default {
+	parse: (text: string) => parse(text)
+};
