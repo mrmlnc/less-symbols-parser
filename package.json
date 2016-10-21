@@ -1,6 +1,6 @@
 {
   "name": "less-symbols-parser",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.1",
   "description": "A very simple and fast Less Symbols parser",
   "license": "MIT",
   "repository": "mrmlnc/less-symbols-parser",
