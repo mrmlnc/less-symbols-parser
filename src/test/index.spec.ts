@@ -86,14 +86,16 @@ describe('Parser', () => {
 		const { imports } = parseSymbols(data);
 
 		const expected = [
-			{ filepath: 'test.less', modes: [], dynamic: false },
-			{ filepath: 'test', modes: ['css'], dynamic: false },
+			{ filepath: 'test.less', modes: [], dynamic: false, css: false },
+			{ filepath: 'test.css', modes: [], dynamic: false, css: true },
+			{ filepath: 'test', modes: ['css'], dynamic: false, css: true },
 			{
 				filepath: 'test.less',
 				modes: ['optional', 'reference'],
-				dynamic: false
+				dynamic: false,
+				css: false
 			},
-			{ filepath: '@{test}.less', modes: [], dynamic: true }
+			{ filepath: '@{test}.less', modes: [], dynamic: true, css: false }
 		];
 
 		assert.deepEqual(imports, expected);

@@ -13,6 +13,7 @@ export interface IImport {
 	filepath: string;
 	modes: string[];
 	dynamic: boolean;
+	css: boolean;
 }
 
 export interface IMixin {
@@ -77,10 +78,13 @@ export function parseSymbols(text: string) {
 				continue;
 			}
 
+			const modes = stat[1] ? stat[1].split(/,\s*/) : [];
+
 			imports.push({
 				filepath: stat[2],
-				modes: stat[1] ? stat[1].split(/,\s*/) : [],
-				dynamic: /[@{}\*]/.test(stat[2])
+				modes,
+				dynamic: /[@{}\*]/.test(stat[2]),
+				css: /\.css$/.test(stat[2]) || modes.indexOf('css') !== -1
 			});
 		} else if (token[0] === 'at-word' && token[1].endsWith(':')) { // Variables
 			line = token[2];
