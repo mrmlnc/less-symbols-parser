@@ -48,7 +48,7 @@ describe('Parser', () => {
 		const { mixins } = parser.parse(data);
 
 		const expected = [
-			{ name: '.b', parameters: [], line: 4, column: 1  },
+			{ name: '.b', parameters: [], line: 4, column: 1 },
 			{
 				name: '.c',
 				parameters: [
@@ -111,6 +111,25 @@ describe('Parser', () => {
 		};
 
 		assert.deepEqual(symbols, expected);
+	});
+
+	it('Loop', () => {
+		const data = fs.readFileSync('./fixtures/loop.less').toString();
+
+		const symbols = parser.parse(data);
+
+		const expected = {
+			variables: [
+				{ name: '@a', value: '1', line: 1, column: 1 },
+				{ name: '@b', value: '2', line: 2, column: 1 }
+			],
+			mixins: [
+				{ name: '.test', parameters: [], line: 3, column: 1 }
+			],
+			imports: []
+		};
+
+		assert.deepEqual(expected, symbols);
 	});
 
 });

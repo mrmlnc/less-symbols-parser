@@ -63,7 +63,7 @@ function parse(text: string) {
 			pos++;
 
 			let str = '';
-			while (true) {
+			while (pos < length) {
 				token = tokens[pos];
 				if (token[0] === ';') {
 					break;
@@ -87,7 +87,7 @@ function parse(text: string) {
 			const column = token[3];
 
 			let value = '';
-			while (tokens[pos][0] !== ';') {
+			while (pos < length && tokens[pos][0] !== ';') {
 				token = tokens[pos];
 
 				if (token[0] === '{') {
@@ -96,7 +96,7 @@ function parse(text: string) {
 					value += '{';
 
 					pos++;
-					while (true) {
+					while (pos < length) {
 						token = tokens[pos];
 						if (token[0] === ';' && ruleset === 0) {
 							break;
@@ -133,7 +133,7 @@ function parse(text: string) {
 			line = token[2];
 
 			let name = '';
-			while (true) {
+			while (pos < length) {
 				token = tokens[pos];
 				if (token[0] === ':' || token[0] === 'brackets' || token[0] === '(' || token[0] === '{') {
 					break;
@@ -149,7 +149,7 @@ function parse(text: string) {
 			} else if (token[0] === '(') {
 				paramsColumn = token[3];
 				pos++;
-				while (true) {
+				while (pos < length) {
 					token = tokens[pos];
 					if (token[0] === ')') {
 						break;
@@ -181,7 +181,7 @@ function parse(text: string) {
 			let ruleset = 1;
 
 			pos++;
-			while (true) {
+			while (pos < length) {
 				token = tokens[pos];
 				if (ruleset === 0) {
 					break;
