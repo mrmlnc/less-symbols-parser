@@ -169,7 +169,7 @@ export function parseSymbols(text: string) {
 				params = `(${params})`;
 			}
 
-			if (tokens[pos + 1][0] === ';' || tokens[pos + 2][0] === ';') {
+			if ((tokens[pos + 1] && tokens[pos + 1][0] === ';') || (tokens[pos + 2] && tokens[pos + 2][0] === ';')) {
 				pos++;
 				continue;
 			}

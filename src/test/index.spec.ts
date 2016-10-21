@@ -134,4 +134,18 @@ describe('Parser', () => {
 		assert.deepEqual(expected, symbols);
 	});
 
+	it('Dot', () => {
+		const data = fs.readFileSync('./fixtures/dot.less').toString();
+
+		const symbols = parseSymbols(data);
+
+		const expected = {
+			variables: [],
+			mixins: [],
+			imports: []
+		};
+
+		assert.deepEqual(expected, symbols);
+	});
+
 });
