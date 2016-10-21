@@ -3,14 +3,14 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 
-import parser from '../index';
+import { parseSymbols } from '../index';
 
 describe('Parser', () => {
 
 	it('Variables', () => {
 		const data = fs.readFileSync('./fixtures/variables.less').toString();
 
-		const { variables } = parser.parse(data);
+		const { variables } = parseSymbols(data);
 
 		const expected = [
 			{ name: '@a', value: '1', line: 2, column: 1 },
@@ -45,7 +45,7 @@ describe('Parser', () => {
 	it('Mixins', () => {
 		const data = fs.readFileSync('./fixtures/mixins.less').toString();
 
-		const { mixins } = parser.parse(data);
+		const { mixins } = parseSymbols(data);
 
 		const expected = [
 			{ name: '.b', parameters: [], line: 4, column: 1 },
@@ -83,7 +83,7 @@ describe('Parser', () => {
 	it('Imports', () => {
 		const data = fs.readFileSync('./fixtures/imports.less').toString();
 
-		const { imports } = parser.parse(data);
+		const { imports } = parseSymbols(data);
 
 		const expected = [
 			{ filepath: 'test.less', modes: [], dynamic: false },
@@ -102,7 +102,7 @@ describe('Parser', () => {
 	it('Comments', () => {
 		const data = fs.readFileSync('./fixtures/comments.less').toString();
 
-		const symbols = parser.parse(data);
+		const symbols = parseSymbols(data);
 
 		const expected = {
 			variables: [],
@@ -116,7 +116,7 @@ describe('Parser', () => {
 	it('Loop', () => {
 		const data = fs.readFileSync('./fixtures/loop.less').toString();
 
-		const symbols = parser.parse(data);
+		const symbols = parseSymbols(data);
 
 		const expected = {
 			variables: [

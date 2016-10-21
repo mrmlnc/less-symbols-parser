@@ -4,7 +4,7 @@ import * as assert from 'assert';
 import * as path from 'path';
 import * as fs from 'fs';
 
-import parser from '../index';
+import { parseSymbols } from '../index';
 
 describe('Bootstrap', () => {
 
@@ -18,7 +18,7 @@ describe('Bootstrap', () => {
 			return !/bootstrap|mixins|variables|theme/.test(filename);
 		}).forEach((filename) => {
 			const data = fs.readFileSync(path.join(dir, filename)).toString();
-			const symbols = parser.parse(data);
+			const symbols = parseSymbols(data);
 			if (symbols.imports.length !== 0 || symbols.mixins.length !== 0 || symbols.variables.length !== 0) {
 				status = false;
 				files.push(filename);
@@ -55,7 +55,7 @@ describe('Bootstrap', () => {
 		const current = {};
 		['bootstrap.less', 'mixins.less', 'variables.less', 'theme.less'].forEach((filename) => {
 			const data = fs.readFileSync(path.join(dir, filename)).toString();
-			const symbols = parser.parse(data);
+			const symbols = parseSymbols(data);
 
 			current[filename] = {
 				variables: symbols.variables.length,
@@ -72,7 +72,7 @@ describe('Bootstrap', () => {
 
 		fs.readdirSync(path.join(dir, 'mixins')).forEach((filename) => {
 			const data = fs.readFileSync(path.join(dir, 'mixins', filename)).toString();
-			const symbols = parser.parse(data);
+			const symbols = parseSymbols(data);
 
 			symbolsCount += symbols.imports.length + symbols.mixins.length + symbols.variables.length;
 		});

@@ -1,4 +1,4 @@
-# less-symbols-parser (WIP)
+# less-symbols-parser
 
 > A very simple and fast Less Symbols parser.
 
@@ -23,7 +23,7 @@ Primarily, this module is designed to work with [vscode-less](https://github.com
 ```js
 const symbolsParser = require('less-symbols-parser');
 
-const symbols = symbolsParser.parse('@a: 1;');
+const symbols = symbolsParser.parseSymbols('@a: 1;');
 // console.log(symbols);
 // {
 //   variables: [ { name: '@a', value: '1', line: 1, column: 1 } ],

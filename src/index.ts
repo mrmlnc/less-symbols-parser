@@ -42,7 +42,7 @@ function makeMixinParameter(text: string, line: number, column: number): IVariab
 	return variables;
 }
 
-function parse(text: string) {
+export function parseSymbols(text: string) {
 	const tokens = tokenizer(text);
 
 	let variables: IVariable[] = [];
@@ -206,7 +206,3 @@ function parse(text: string) {
 		imports
 	};
 }
-
-export default {
-	parse: (text: string) => parse(text)
-};
