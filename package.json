@@ -17,6 +17,7 @@
     "start": "rimraf out && tsc --watch"
   },
   "main": "out/index.js",
+  "typings": "out/index.d.ts",
   "files": [
     "out/index.d.ts",
     "out/index.js",
