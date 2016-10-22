@@ -20,11 +20,15 @@
 			#f(@hm: "broken highlighting in VS Code") {
 	content: "";
 }
-
+.one(@a: 1, @b: rgba(0,0,0,0)) {}
+.two(
+	@a: 1;
+	@b: rgba(0,0,0,0)
+) {}
 .b();
 .c(1, 2);
 .c()
-            ;
+			;
 .test {
 	.d();
 }
