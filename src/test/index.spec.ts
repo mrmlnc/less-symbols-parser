@@ -69,6 +69,22 @@ describe('Parser', () => {
 					{ name: '@hm', value: '"broken highlighting in VS Code"', offset: 163 }
 				],
 				offset: 160
+			},
+			{
+				name: '.one',
+				parameters: [
+					{ name: '@a', value: '1', offset: 225 },
+					{ name: '@b', value: 'rgba(0,0,0,0)', offset: 232 }
+				],
+				offset: 220
+			},
+			{
+				name: '.two',
+				parameters: [
+					{ name: '@a', value: '1', offset: 261 },
+					{ name: '@b', value: 'rgba(0,0,0,0)', offset: 269 }
+				],
+				offset: 254
 			}
 		];
 

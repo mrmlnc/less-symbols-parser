@@ -21,6 +21,37 @@ export interface IMixin {
 	offset: number;
 }
 
+function makeMixinParameters(text: string, offset): IVariable[] {
+	const variables: IVariable[] = [];
+	if (text === '()') {
+		return variables;
+	}
+
+	// Remove parenthesis
+	text = text.slice(1, text.length - 1);
+	const params = text.split(/([,;]\s*)(?=@)/);
+
+	// Skip `(`
+	offset += 1;
+
+	for (let i = 0; i < params.length; i = i + 2) {
+		const token = params[i];
+		const stat = token.match(/([\n\t\r\s]*)(@[\w-]+)(?:\s*:\s*(.*))?/);
+
+		offset += stat[1].length || 0;
+
+		variables.push({
+			name: stat[2],
+			value: stat[3] ? stat[3].trim() : null,
+			offset
+		});
+
+		offset += token.trim().length + (params[i + 1] ? params[i + 1].length : 0);
+	}
+
+	return variables;
+}
+
 export function parseSymbols(text: string) {
 	const tokens = tokenizer(text);
 
@@ -122,59 +153,35 @@ export function parseSymbols(text: string) {
 				pos++;
 			}
 
-			let isMixin = false;
-			const parameters: IVariable[] = [];
+			let paramsOffset = offset;
+			let params = '';
 			if (token[0] === 'brackets') {
-				isMixin = true;
+				paramsOffset = token[2];
+				params = token[1];
 			} else if (token[0] === '(') {
-				isMixin = true;
-
-				let paramsOffset = token[2];
-				let paramsName = '';
-				let paramsValue = '';
-
+				paramsOffset = token[2];
 				pos++;
 				while (pos < length) {
 					token = tokens[pos];
-					if (token[0] === 'at-word' && token[1].endsWith(',')) {
-						token[1] = token[1].slice(0, -1);
-						tokens.splice(pos + 1, 0, [',', ',', token[2] + paramsName.length]);
-
-						// Return to previous position
-						pos--;
-					} else if (token[0] === ',' || token[0] === ';' || token[0] === ')') {
-						parameters.push({
-							name: paramsName,
-							value: paramsValue || null,
-							offset: paramsOffset
-						});
-
-						if (token[0] === ')') {
-							break;
-						}
-
-						paramsName = '';
-						paramsValue = '';
-					} else if (token[0] === 'at-word') {
-						paramsOffset = token[2];
-						paramsName = token[1].endsWith(':') ? token[1].slice(0, -1) : token[1];
-					} else if (token[0] !== 'space') {
-						paramsValue += token[1];
+					if (token[0] === ')') {
+						break;
 					}
 
+					params += token[1];
 					pos++;
 				}
-			}
 
+				params = `(${params})`;
+			}
 			if ((tokens[pos + 1] && tokens[pos + 1][0] === ';') || (tokens[pos + 2] && tokens[pos + 2][0] === ';')) {
 				pos++;
 				continue;
 			}
 
-			if (name && isMixin) {
+			if (name && params) {
 				mixins.push({
 					name: name.trim(),
-					parameters,
+					parameters: makeMixinParameters(params, paramsOffset),
 					offset
 				});
 			} else {
