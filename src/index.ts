@@ -5,8 +5,7 @@ import tokenizer from './tokenizer';
 export interface IVariable {
 	name: string;
 	value: string;
-	line: number;
-	column: number;
+	offset: number;
 }
 
 export interface IImport {
@@ -19,28 +18,7 @@ export interface IImport {
 export interface IMixin {
 	name: string;
 	parameters: IVariable[];
-	line: number;
-	column: number;
-}
-
-function makeMixinParameter(text: string, line: number, column: number): IVariable[] {
-	if (text === '()') {
-		return [];
-	}
-
-	const params = text.slice(1, text.length - 1).split(/,\s*|;\s*/);
-	const variables = params.map((x) => {
-		const stat = x.match(/(@[\w-]+)(?:\s*:\s*(.*))?/);
-
-		return <IVariable>{
-			name: stat[1],
-			value: stat[2] || null,
-			line,
-			column
-		};
-	});
-
-	return variables;
+	offset: number;
 }
 
 export function parseSymbols(text: string) {
@@ -53,7 +31,7 @@ export function parseSymbols(text: string) {
 	let token;
 	let pos = 0;
 
-	let line = 1;
+	let offset = 0;
 
 	const length = tokens.length;
 
@@ -87,11 +65,10 @@ export function parseSymbols(text: string) {
 				css: /\.css$/.test(stat[2]) || modes.indexOf('css') !== -1
 			});
 		} else if (token[0] === 'at-word' && token[1].endsWith(':')) { // Variables
-			line = token[2];
+			offset = token[2];
 			pos++;
 
 			const name = token[1].slice(0, -1);
-			const column = token[3];
 
 			let value = '';
 			while (pos < length && tokens[pos][0] !== ';') {
@@ -130,14 +107,10 @@ export function parseSymbols(text: string) {
 			variables.push({
 				name,
 				value: value.trim(),
-				line,
-				column
+				offset
 			});
 		} else if (token[0] === 'word' && (token[1].startsWith('.') || token[1].startsWith('#'))) { // Potential Mixin
-			const column = token[3];
-			let paramsColumn = column;
-
-			line = token[2];
+			offset = token[2];
 
 			let name = '';
 			while (pos < length) {
@@ -149,24 +122,48 @@ export function parseSymbols(text: string) {
 				pos++;
 			}
 
-			let params = '';
+			let isMixin = false;
+			const parameters: IVariable[] = [];
 			if (token[0] === 'brackets') {
-				paramsColumn = token[3];
-				params = token[1];
+				isMixin = true;
 			} else if (token[0] === '(') {
-				paramsColumn = token[3];
+				isMixin = true;
+
+				let paramsOffset = token[2];
+				let paramsName = '';
+				let paramsValue = '';
+
 				pos++;
 				while (pos < length) {
 					token = tokens[pos];
-					if (token[0] === ')') {
-						break;
+					if (token[0] === 'at-word' && token[1].endsWith(',')) {
+						token[1] = token[1].slice(0, -1);
+						tokens.splice(pos + 1, 0, [',', ',', token[2] + paramsName.length]);
+
+						// Return to previous position
+						pos--;
+					} else if (token[0] === ',' || token[0] === ';' || token[0] === ')') {
+						parameters.push({
+							name: paramsName,
+							value: paramsValue || null,
+							offset: paramsOffset
+						});
+
+						if (token[0] === ')') {
+							break;
+						}
+
+						paramsName = '';
+						paramsValue = '';
+					} else if (token[0] === 'at-word') {
+						paramsOffset = token[2];
+						paramsName = token[1].endsWith(':') ? token[1].slice(0, -1) : token[1];
+					} else if (token[0] !== 'space') {
+						paramsValue += token[1];
 					}
 
-					params += token[1];
 					pos++;
 				}
-
-				params = `(${params})`;
 			}
 
 			if ((tokens[pos + 1] && tokens[pos + 1][0] === ';') || (tokens[pos + 2] && tokens[pos + 2][0] === ';')) {
@@ -174,12 +171,11 @@ export function parseSymbols(text: string) {
 				continue;
 			}
 
-			if (name && params) {
+			if (name && isMixin) {
 				mixins.push({
 					name: name.trim(),
-					parameters: makeMixinParameter(params, line, paramsColumn),
-					line,
-					column
+					parameters,
+					offset
 				});
 			} else {
 				pos--;

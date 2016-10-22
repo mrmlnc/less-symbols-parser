@@ -13,30 +13,28 @@ describe('Parser', () => {
 		const { variables } = parseSymbols(data);
 
 		const expected = [
-			{ name: '@a', value: '1', line: 2, column: 1 },
-			{ name: '@b', value: '@a', line: 3, column: 1 },
-			{ name: '@c', value: 'text', line: 4, column: 1 },
-			{ name: '@d', value: '"text"', line: 5, column: 1 },
-			{ name: '@e', value: '"@test:1;"', line: 6, column: 1 },
+			{ name: '@a', value: '1', offset: 8 },
+			{ name: '@b', value: '@a', offset: 15 },
+			{ name: '@c', value: 'text', offset: 23 },
+			{ name: '@d', value: '"text"', offset: 33 },
+			{ name: '@e', value: '"@test:1;"', offset: 45 },
 			{
 				name: '@f',
 				value: '"{ content" "\\{ content \\}" "\\{ content }" "\\" content \\}" "\\\\" "@{c}"',
-				line: 7,
-				column: 1
+				offset: 61
 			},
 			{
 				name: '@g',
 				value: '{\n@skip: me;\ncontent: "";\n\n.test {\n@skip: me;\n}\n}',
-				line: 8,
-				column: 1
+				offset: 137
 			},
-			{ name: '@h', value: '1, 2, 3', line: 16, column: 1 },
-			{ name: '@i', value: '1 2 3', line: 17, column: 1 },
-			{ name: '@j', value: '@a !important', line: 18, column: 5 },
-			{ name: '@k', value: '\\\\', line: 19, column: 1 },
-			{ name: '@l', value: '\\\\\\test', line: 20, column: 1 },
-			{ name: '@n', value: 'end', line: 24, column: 2 },
-			{ name: '@q', value: '1', line: 32, column: 1 }
+			{ name: '@h', value: '1, 2, 3', offset: 198 },
+			{ name: '@i', value: '1 2 3', offset: 211 },
+			{ name: '@j', value: '@a !important', offset: 226 },
+			{ name: '@k', value: '\\\\', offset: 245 },
+			{ name: '@l', value: '\\\\\\test', offset: 253 },
+			{ name: '@n', value: 'end', offset: 288 },
+			{ name: '@q', value: '1', offset: 357 }
 		];
 
 		assert.deepEqual(variables, expected);
@@ -48,32 +46,29 @@ describe('Parser', () => {
 		const { mixins } = parseSymbols(data);
 
 		const expected = [
-			{ name: '.b', parameters: [], line: 4, column: 1 },
+			{ name: '.b', parameters: [], offset: 21 },
 			{
 				name: '.c',
 				parameters: [
-					{ name: '@a', value: null, line: 9, column: 4 },
-					{ name: '@b', value: null, line: 9, column: 4 },
-					{ name: '@c', value: null, line: 9, column: 4 }
+					{ name: '@a', value: null, offset: 51 },
+					{ name: '@b', value: null, offset: 55 },
+					{ name: '@c', value: 'rgba(0,0,0,0)', offset: 58 }
 				],
-				line: 9,
-				column: 1
+				offset: 47
 			},
 			{
 				name: '.d',
 				parameters: [
-					{ name: '@a', value: '"{()}"', line: 12, column: 2 }
+					{ name: '@a', value: '"{()}"', offset: 100 }
 				],
-				line: 12,
-				column: 1
+				offset: 95
 			},
 			{
 				name: '#f',
 				parameters: [
-					{ name: '@hm', value: '"broken highlighting in VS Code"', line: 20, column: 6 }
+					{ name: '@hm', value: '"broken highlighting in VS Code"', offset: 163 }
 				],
-				line: 20,
-				column: 4
+				offset: 160
 			}
 		];
 
@@ -122,11 +117,11 @@ describe('Parser', () => {
 
 		const expected = {
 			variables: [
-				{ name: '@a', value: '1', line: 1, column: 1 },
-				{ name: '@b', value: '2', line: 2, column: 1 }
+				{ name: '@a', value: '1', offset: 0 },
+				{ name: '@b', value: '2', offset: 7 }
 			],
 			mixins: [
-				{ name: '.test', parameters: [], line: 3, column: 1 }
+				{ name: '.test', parameters: [], offset: 14 }
 			],
 			imports: []
 		};

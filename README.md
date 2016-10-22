@@ -26,11 +26,32 @@ const symbolsParser = require('less-symbols-parser');
 const symbols = symbolsParser.parseSymbols('@a: 1;');
 // console.log(symbols);
 // {
-//   variables: [ { name: '@a', value: '1', line: 1, column: 1 } ],
+//   variables: [ { name: '@a', value: '1', offset: 0 } ],
 //   mixins: [],
 //   imports: []
 // }
 ```
+
+## Symbols
+
+**variable**
+
+  * name: `string`
+  * value: `string`
+  * offset: `number`
+
+**mixin**
+
+  * name: `string`
+  * parameters: `variable[]`
+  * offset: `number`
+
+**import**
+
+  * filepath: `string`
+  * modes: `string[]`
+  * dynamic: `boolean` (filepath contains `@`, `{` or `}`)
+  * css: `boolean` (filepath contains `css` extension or mode)
 
 ## Changelog
 

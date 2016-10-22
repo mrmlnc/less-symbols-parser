@@ -24,6 +24,7 @@
 // ## CHANGES
 //   * `//` - comment
 //   * Remove `options.ignore`
+//   * Simplify tokens: returns only position without details
 
 const SINGLE_QUOTE = '\''.charCodeAt(0);
 const DOUBLE_QUOTE = '"'.charCodeAt(0);
@@ -94,27 +95,27 @@ export default function tokenizer(text) {
 				break;
 
 			case OPEN_SQUARE:
-				tokens.push(['[', '[', line, pos - offset]);
+				tokens.push(['[', '[', pos]);
 				break;
 
 			case CLOSE_SQUARE:
-				tokens.push([']', ']', line, pos - offset]);
+				tokens.push([']', ']', pos]);
 				break;
 
 			case OPEN_CURLY:
-				tokens.push(['{', '{', line, pos - offset]);
+				tokens.push(['{', '{', pos]);
 				break;
 
 			case CLOSE_CURLY:
-				tokens.push(['}', '}', line, pos - offset]);
+				tokens.push(['}', '}',  pos]);
 				break;
 
 			case COLON:
-				tokens.push([':', ':', line, pos - offset]);
+				tokens.push([':', ':', pos]);
 				break;
 
 			case SEMICOLON:
-				tokens.push([';', ';', line, pos - offset]);
+				tokens.push([';', ';', pos]);
 				break;
 
 			case OPEN_PARENTHESES:
@@ -138,10 +139,7 @@ export default function tokenizer(text) {
 						}
 					} while (escaped);
 
-					tokens.push(['brackets', text.slice(pos, next + 1),
-						line, pos - offset,
-						line, next - offset
-					]);
+					tokens.push(['brackets', text.slice(pos, next + 1), pos]);
 					pos = next;
 
 				} else {
@@ -149,12 +147,9 @@ export default function tokenizer(text) {
 					content = text.slice(pos, next + 1);
 
 					if (next === -1 || RE_BAD_BRACKET.test(content)) {
-						tokens.push(['(', '(', line, pos - offset]);
+						tokens.push(['(', '(', pos]);
 					} else {
-						tokens.push(['brackets', content,
-							line, pos - offset,
-							line, next - offset
-						]);
+						tokens.push(['brackets', content, pos]);
 						pos = next;
 					}
 				}
@@ -162,7 +157,7 @@ export default function tokenizer(text) {
 				break;
 
 			case CLOSE_PARENTHESES:
-				tokens.push([')', ')', line, pos - offset]);
+				tokens.push([')', ')', pos]);
 				break;
 
 			case SINGLE_QUOTE:
@@ -195,10 +190,7 @@ export default function tokenizer(text) {
 					nextOffset = offset;
 				}
 
-				tokens.push(['string', text.slice(pos, next + 1),
-					line, pos - offset,
-					nextLine, next - nextOffset
-				]);
+				tokens.push(['string', text.slice(pos, next + 1), pos]);
 
 				offset = nextOffset;
 				line = nextLine;
@@ -213,10 +205,7 @@ export default function tokenizer(text) {
 				} else {
 					next = RE_AT_END.lastIndex - 2;
 				}
-				tokens.push(['at-word', text.slice(pos, next + 1),
-					line, pos - offset,
-					line, next - offset
-				]);
+				tokens.push(['at-word', text.slice(pos, next + 1), pos]);
 				pos = next;
 				break;
 
@@ -236,10 +225,7 @@ export default function tokenizer(text) {
 					code !== FEED)) {
 					next += 1;
 				}
-				tokens.push(['word', text.slice(pos, next + 1),
-					line, pos - offset,
-					line, next - offset
-				]);
+				tokens.push(['word', text.slice(pos, next + 1), pos]);
 				pos = next;
 				break;
 
@@ -268,10 +254,7 @@ export default function tokenizer(text) {
 						nextOffset = offset;
 					}
 
-					tokens.push(['comment', content,
-						line, pos - offset,
-						nextLine, next - nextOffset
-					]);
+					tokens.push(['comment', content, pos]);
 
 					offset = nextOffset;
 					line = nextLine;
@@ -286,10 +269,7 @@ export default function tokenizer(text) {
 						next = RE_WORD_END.lastIndex - 2;
 					}
 
-					tokens.push(['word', text.slice(pos, next + 1),
-						line, pos - offset,
-						line, next - offset
-					]);
+					tokens.push(['word', text.slice(pos, next + 1), pos]);
 					pos = next;
 				}
 
