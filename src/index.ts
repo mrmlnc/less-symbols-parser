@@ -173,7 +173,30 @@ export function parseSymbols(text: string) {
 
 				params = `(${params})`;
 			}
-			if ((tokens[pos + 1] && tokens[pos + 1][0] === ';') || (tokens[pos + 2] && tokens[pos + 2][0] === ';')) {
+
+			// Skip Mixin reference
+			let c = 0;
+			let next = pos;
+			while (next < length) {
+				token = tokens[next];
+
+				if (token[0] === '{') {
+					break;
+				} else if (token[0] === ';') {
+					c = 3;
+					break;
+				} else if (token[0] !== 'word' && token[0] !== 'space' && token[0] !== 'brackets') {
+					c++;
+				}
+
+				next++;
+			}
+
+			// Mixin declaration can only be:
+			//  * `()` + `space when/and/or/()` + `{`
+			//  * `()` + `space` + `{`
+			//  * `()` + `{`
+			if (c > 2) {
 				pos++;
 				continue;
 			}
