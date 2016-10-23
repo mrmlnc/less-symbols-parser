@@ -50,7 +50,7 @@ const RE_AT_END = /[ \n\t\r\f\{\(\)'"\\;/\[\]#]/g;
 const RE_WORD_END = /[ \n\t\r\f\(\)\{\}:;@!'"\\\]\[#]|\/(?=\*)/g;
 const RE_BAD_BRACKET = /.[\\\/\("'\n]/;
 
-export default function tokenizer(text) {
+export default function tokenizer(text: string) {
 	let tokens = [];
 
 	let code, next, quote, lines, last, content, escape,
@@ -107,7 +107,7 @@ export default function tokenizer(text) {
 				break;
 
 			case CLOSE_CURLY:
-				tokens.push(['}', '}',  pos]);
+				tokens.push(['}', '}', pos]);
 				break;
 
 			case COLON:
@@ -233,13 +233,16 @@ export default function tokenizer(text) {
 				const isLessComent = code === SLASH && text.charCodeAt(pos + 1) === SLASH;
 				if (isLessComent || text.charCodeAt(pos + 1) === ASTERISK) {
 					if (isLessComent) {
-						next = text.indexOf('\n', pos + 1);
+						next = pos;
+						while (text.charCodeAt(next) !== NEWLINE && next < length) {
+							next++;
+						}
 					} else {
 						next = text.indexOf('*/', pos + 2) + 1;
 					}
 
-					if (next === 0) {
-						next = text.length;
+					if (next === 0 || next === length) {
+						next = length;
 					}
 
 					content = text.slice(pos, next + 1);
