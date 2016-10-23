@@ -196,7 +196,7 @@ export function parseSymbols(text: string) {
 			//  * `()` + `space when/and/or/()` + `{`
 			//  * `()` + `space` + `{`
 			//  * `()` + `{`
-			if (c > 2) {
+			if (c > 2 || next === length) {
 				pos++;
 				continue;
 			}
