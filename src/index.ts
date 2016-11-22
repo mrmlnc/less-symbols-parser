@@ -66,6 +66,11 @@ function parseSymbols(text: string) {
 
 	const length = tokens.length;
 
+
+	// RegExp's
+	const reImportStat = /(?:\(([\w-,\s]+)\))?\s['"](.*)['"]/;
+	const reImportDynamic = /[@{}\*]/;
+
 	while (pos < length) {
 		token = tokens[pos];
 
@@ -81,8 +86,8 @@ function parseSymbols(text: string) {
 				str += token[1];
 				pos++;
 			}
-			const stat = str.match(/(?:\(([\w-,\s]+)\))?\s['"](.*)['"]/);
 
+			const stat = str.match(reImportStat);
 			if (!stat) {
 				continue;
 			}
@@ -92,9 +97,21 @@ function parseSymbols(text: string) {
 			imports.push({
 				filepath: stat[2],
 				modes,
-				dynamic: /[@{}\*]/.test(stat[2]),
+				dynamic: reImportDynamic.test(stat[2]),
 				css: /\.css$/.test(stat[2]) || modes.indexOf('css') !== -1
 			});
+		} else if (token[0] === 'at-word' && token[1].indexOf(':') !== -1 && !token[1].endsWith(':')) { // Variables without space after colon
+			const colonIndex = token[1].indexOf(':')  + 1;
+			const value = token[1].substr(colonIndex);
+
+			// Update current token
+			token[1] = token[1].substring(0, colonIndex);
+
+			// Create new token after current token
+			tokens.splice(pos + 1, 0, ['string', value]);
+
+			// One step back
+			pos--;
 		} else if (token[0] === 'at-word' && token[1].endsWith(':')) { // Variables
 			offset = token[2];
 			pos++;

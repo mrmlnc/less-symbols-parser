@@ -34,7 +34,9 @@ describe('Parser', () => {
 			{ name: '@k', value: '\\\\', offset: 245 },
 			{ name: '@l', value: '\\\\\\test', offset: 253 },
 			{ name: '@n', value: 'end', offset: 288 },
-			{ name: '@q', value: '1', offset: 357 }
+			{ name: '@q', value: '1', offset: 357 },
+			{ name: '@r', value: '1', offset: 401 },
+			{ name: '@s', value: '@r', offset: 407 }
 		];
 
 		assert.deepEqual(variables, expected);
