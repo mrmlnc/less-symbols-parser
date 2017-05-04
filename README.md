@@ -1,5 +1,7 @@
 # less-symbols-parser
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mrmlnc/less-symbols-parser.svg)](https://greenkeeper.io/)
+
 > A very simple and fast Less Symbols parser.
 
 [![Travis Status](https://travis-ci.org/mrmlnc/less-symbols-parser.svg?branch=master)](https://travis-ci.org/mrmlnc/less-symbols-parser)
