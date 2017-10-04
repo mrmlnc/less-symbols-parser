@@ -3,7 +3,7 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 
-import { parseSymbols } from '../index';
+import { parseSymbols, IVariable, IMixin, IImport } from '../index';
 
 describe('Parser', () => {
 
@@ -120,9 +120,9 @@ describe('Parser', () => {
 		const symbols = parseSymbols(data);
 
 		const expected = {
-			variables: [],
-			mixins: [],
-			imports: []
+			variables: [] as IVariable[],
+			mixins: [] as IMixin[],
+			imports: [] as IImport[]
 		};
 
 		assert.deepEqual(symbols, expected);
@@ -139,9 +139,9 @@ describe('Parser', () => {
 				{ name: '@b', value: '2', offset: 7 }
 			],
 			mixins: [
-				{ name: '.test', parameters: [], offset: 14 }
+				{ name: '.test', parameters: [] as IVariable[], offset: 14 }
 			],
-			imports: []
+			imports: [] as IImport[]
 		};
 
 		assert.deepEqual(expected, symbols);
@@ -153,9 +153,9 @@ describe('Parser', () => {
 		const symbols = parseSymbols(data);
 
 		const expected = {
-			variables: [],
-			mixins: [],
-			imports: []
+			variables: [] as IVariable[],
+			mixins: [] as IMixin[],
+			imports: [] as IImport[]
 		};
 
 		assert.deepEqual(expected, symbols);
