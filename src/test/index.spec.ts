@@ -36,7 +36,8 @@ describe('Parser', () => {
 			{ name: '@n', value: 'end', offset: 288 },
 			{ name: '@q', value: '1', offset: 357 },
 			{ name: '@r', value: '1', offset: 401 },
-			{ name: '@s', value: '@r', offset: 407 }
+			{ name: '@s', value: '@r', offset: 407 },
+			{ name: '@globalBoxShadow2', value: '0 0 7px 0 rgba(0, 0, 0, 0.75)', offset: 414 }
 		];
 
 		assert.deepEqual(variables, expected);

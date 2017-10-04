@@ -145,7 +145,7 @@ function parseSymbols(text: string) {
 						value += token[1].replace(/\t/g, '');
 						pos++;
 					}
-				} else if (token[0] === 'word' || token[0] === 'at-word' || token[0] === 'string' || token[0] === 'space') {
+				} else if (token[0] === 'word' || token[0] === 'at-word' || token[0] === 'string' || token[0] === 'space' || token[0] === 'brackets') {
 					value += token[1];
 				}
 				pos++;
