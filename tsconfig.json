@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "es2015",
+		"target": "es5",
 		"module": "commonjs",
 		"moduleResolution": "node",
 
@@ -19,6 +19,10 @@
 		"experimentalDecorators": true,
 		"declaration": true,
 
-		"pretty": true
+		"pretty": true,
+
+		"lib": [
+			"es2015"
+		]
 	}
 }
