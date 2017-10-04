@@ -2,7 +2,13 @@
 
 > A very simple and fast Less Symbols parser.
 
-[![Travis Status](https://travis-ci.org/mrmlnc/less-symbols-parser.svg?branch=master)](https://travis-ci.org/mrmlnc/less-symbols-parser)
+## Donate
+
+If you want to thank me, or promote your Issue.
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/mrmlnc)
+
+> Sorry, but I have work and support for plugins and modules requires some time after work. I will be glad of your support or PR's.
 
 ## Install
 
