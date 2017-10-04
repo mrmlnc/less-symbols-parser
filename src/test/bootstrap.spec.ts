@@ -12,7 +12,7 @@ describe('Bootstrap', () => {
 
 	it('Files without symbols', () => {
 		let status = true;
-		let files = [];
+		const files: string[] = [];
 
 		fs.readdirSync(dir).filter((filename) => {
 			return !/bootstrap|mixins|variables|theme/.test(filename);
@@ -52,7 +52,7 @@ describe('Bootstrap', () => {
 			}
 		};
 
-		const current = {};
+		const current: Record<string, any> = {};
 		['bootstrap.less', 'mixins.less', 'variables.less', 'theme.less'].forEach((filename) => {
 			const data = fs.readFileSync(path.join(dir, filename)).toString();
 			const symbols = parseSymbols(data);

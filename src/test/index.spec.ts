@@ -3,7 +3,7 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 
-import { parseSymbols } from '../index';
+import { parseSymbols, IVariable, IMixin, IImport } from '../index';
 
 describe('Parser', () => {
 
@@ -36,7 +36,8 @@ describe('Parser', () => {
 			{ name: '@n', value: 'end', offset: 288 },
 			{ name: '@q', value: '1', offset: 357 },
 			{ name: '@r', value: '1', offset: 401 },
-			{ name: '@s', value: '@r', offset: 407 }
+			{ name: '@s', value: '@r', offset: 407 },
+			{ name: '@globalBoxShadow2', value: '0 0 7px 0 rgba(0, 0, 0, 0.75)', offset: 414 }
 		];
 
 		assert.deepEqual(variables, expected);
@@ -120,9 +121,9 @@ describe('Parser', () => {
 		const symbols = parseSymbols(data);
 
 		const expected = {
-			variables: [],
-			mixins: [],
-			imports: []
+			variables: [] as IVariable[],
+			mixins: [] as IMixin[],
+			imports: [] as IImport[]
 		};
 
 		assert.deepEqual(symbols, expected);
@@ -139,9 +140,9 @@ describe('Parser', () => {
 				{ name: '@b', value: '2', offset: 7 }
 			],
 			mixins: [
-				{ name: '.test', parameters: [], offset: 14 }
+				{ name: '.test', parameters: [] as IVariable[], offset: 14 }
 			],
-			imports: []
+			imports: [] as IImport[]
 		};
 
 		assert.deepEqual(expected, symbols);
@@ -153,9 +154,9 @@ describe('Parser', () => {
 		const symbols = parseSymbols(data);
 
 		const expected = {
-			variables: [],
-			mixins: [],
-			imports: []
+			variables: [] as IVariable[],
+			mixins: [] as IMixin[],
+			imports: [] as IImport[]
 		};
 
 		assert.deepEqual(expected, symbols);

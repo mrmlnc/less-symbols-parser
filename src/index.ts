@@ -21,7 +21,7 @@ export interface IMixin {
 	offset: number;
 }
 
-function makeMixinParameters(text: string, offset): IVariable[] {
+function makeMixinParameters(text: string, offset: number): IVariable[] {
 	const variables: IVariable[] = [];
 	if (text === '()') {
 		return variables;
@@ -55,9 +55,9 @@ function makeMixinParameters(text: string, offset): IVariable[] {
 function parseSymbols(text: string) {
 	const tokens = tokenizer(text);
 
-	let variables: IVariable[] = [];
-	let mixins: IMixin[] = [];
-	let imports: IImport[] = [];
+	const variables: IVariable[] = [];
+	const mixins: IMixin[] = [];
+	const imports: IImport[] = [];
 
 	let token;
 	let pos = 0;
@@ -65,7 +65,6 @@ function parseSymbols(text: string) {
 	let offset = 0;
 
 	const length = tokens.length;
-
 
 	// RegExp's
 	const reImportStat = /(?:\(([\w-,\s]+)\))?\s['"](.*)['"]/;
@@ -101,14 +100,14 @@ function parseSymbols(text: string) {
 				css: /\.css$/.test(stat[2]) || modes.indexOf('css') !== -1
 			});
 		} else if (token[0] === 'at-word' && token[1].indexOf(':') !== -1 && !token[1].endsWith(':')) { // Variables without space after colon
-			const colonIndex = token[1].indexOf(':')  + 1;
+			const colonIndex = token[1].indexOf(':') + 1;
 			const value = token[1].substr(colonIndex);
 
 			// Update current token
 			token[1] = token[1].substring(0, colonIndex);
 
 			// Create new token after current token
-			tokens.splice(pos + 1, 0, ['string', value]);
+			tokens.splice(pos + 1, 0, ['string', value, null]);
 
 			// One step back
 			pos--;
@@ -146,7 +145,7 @@ function parseSymbols(text: string) {
 						value += token[1].replace(/\t/g, '');
 						pos++;
 					}
-				} else if (token[0] === 'word' || token[0] === 'at-word' || token[0] === 'string' || token[0] === 'space') {
+				} else if (token[0] === 'word' || token[0] === 'at-word' || token[0] === 'string' || token[0] === 'space' || token[0] === 'brackets') {
 					value += token[1];
 				}
 				pos++;

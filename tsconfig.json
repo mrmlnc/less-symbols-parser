@@ -2,13 +2,27 @@
 	"compilerOptions": {
 		"target": "es5",
 		"module": "commonjs",
-		"moduleResolution": "classic",
+		"moduleResolution": "node",
+
 		"rootDir": "src",
 		"outDir": "out",
-		"noLib": false,
-		"noImplicitAny": false,
+
+		"alwaysStrict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+
+		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"removeComments": true,
-		"declaration": true
+		"declaration": true,
+
+		"pretty": true,
+
+		"lib": [
+			"es2015"
+		]
 	}
 }
