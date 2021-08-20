@@ -217,10 +217,18 @@ function parseSymbols(text: string) {
 				continue;
 			}
 
+			let parameters: IVariable[] = [];
+
+			try {
+				parameters = makeMixinParameters(params, paramsOffset);
+			} catch (error) {
+				// console.warn(error.message);
+			}
+
 			if (name && params) {
 				mixins.push({
 					name: name.trim(),
-					parameters: makeMixinParameters(params, paramsOffset),
+					parameters,
 					offset
 				});
 			} else {
